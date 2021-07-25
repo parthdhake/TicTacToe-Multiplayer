@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/createJoinFragment">
+
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="com.qourall.tictactoe_multiplayer.fragments.PlayFragment"
+        android:label="fragment_play"
+        tools:layout="@layout/fragment_play" />
+    <fragment
+        android:id="@+id/createJoinFragment"
+        android:name="com.qourall.tictactoe_multiplayer.fragments.CreateJoinFragment"
+        android:label="fragment_create_join"
+        tools:layout="@layout/fragment_create_join" >
+        <action
+            android:id="@+id/action_createJoinFragment_to_createFragment"
+            app:destination="@id/createFragment" />
+        <action
+            android:id="@+id/action_createJoinFragment_to_joinFragment"
+            app:destination="@id/joinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.qourall.tictactoe_multiplayer.fragments.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_createFragment_to_playFragment"
+            app:destination="@id/playFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.qourall.tictactoe_multiplayer.fragments.JoinFragment"
+        android:label="fragment_join"
+        tools:layout="@layout/fragment_join" >
+        <action
+            android:id="@+id/action_joinFragment_to_playFragment"
+            app:destination="@id/playFragment" />
+    </fragment>
+</navigation>
