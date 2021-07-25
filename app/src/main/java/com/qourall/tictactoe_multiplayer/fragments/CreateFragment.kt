@@ -1,17 +1,24 @@
 package com.qourall.tictactoe_multiplayer.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import com.qourall.tictactoe_multiplayer.R
 import com.qourall.tictactoe_multiplayer.data.RoomDetails
 import com.qourall.tictactoe_multiplayer.viewModels.CreateViewModel
 import kotlinx.android.synthetic.main.fragment_create.*
+import kotlinx.android.synthetic.main.fragment_join.*
 
 
 class CreateFragment : Fragment() {
@@ -32,12 +39,29 @@ class CreateFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        copy.setOnClickListener {
+            val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("text", txtroomid.text.toString().trim())
+            clipboardManager.setPrimaryClip(clipData)
+        }
+
         createViewModel.result.observe(viewLifecycleOwner, Observer {
             if(it == null){
                 Toast.makeText(context, "Room Created Successfully", Toast.LENGTH_LONG).show()
             }
             else {
                 Toast.makeText(context, it.message.toString(), Toast.LENGTH_LONG).show()
+            }
+        })
+
+        createViewModel.join.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                if (it.Player2Name != null){
+                    Toast.makeText(context, it.Player2Name + " Joined", Toast.LENGTH_LONG).show()
+                    progressBar.visibility = View.GONE
+                    waiting.visibility = View.GONE
+                    startButton.visibility = View.VISIBLE
+                }
             }
         })
 
@@ -51,6 +75,12 @@ class CreateFragment : Fragment() {
             createViewModel.createRoom(name!!, roomDetails)
             txtroomid.text = roomDetails.RoomID
 
+            createViewModel.realtimeUpdate()
         }
+
+        startButton.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_createFragment_to_playFragment)
+        }
+
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import com.qourall.tictactoe_multiplayer.R
 import com.qourall.tictactoe_multiplayer.data.RoomDetails
 import com.qourall.tictactoe_multiplayer.viewModels.JoinViewModel
@@ -21,6 +22,7 @@ class JoinFragment : Fragment() {
     lateinit var joinViewModel: JoinViewModel
     var name : String? = null
     var etrRoomID : String? = null
+    private var flag : Boolean = false
 
 
     override fun onCreateView(
@@ -49,7 +51,10 @@ class JoinFragment : Fragment() {
 
         joinViewModel.RoomD.observe(viewLifecycleOwner, Observer {
             roomDetails = it
-            Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+            if (name == it.Player2Name){
+                Navigation.findNavController(requireView()).navigate(R.id.action_joinFragment_to_playFragment)
+            }
             if (name != it.Player2Name){
                 Toast.makeText(context, "RoomID Invalid", Toast.LENGTH_LONG).show()
             }

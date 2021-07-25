@@ -14,7 +14,6 @@ class JoinViewModel : ViewModel() {
     private var _RoomDetails = MutableLiveData<RoomDetails>()
     val RoomD : LiveData<RoomDetails>
         get() = _RoomDetails
-    var key: String? = null
 
 
     fun getRoomDetails(roomDetails: RoomDetails, name: String, etrRoomId: String){
@@ -23,29 +22,25 @@ class JoinViewModel : ViewModel() {
         db.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
-
                     for (room in snapshot.children){
                         if (room.key?.takeLast(5).toString() == etrRoomId){
+                            roomDetails.RoomID = etrRoomId
+                            val key = room.key!!
+
                             val d : RoomDetails? = room.getValue(RoomDetails::class.java)
-                            key = room.key
                             if (d != null) {
                                 d.Player2Name = name
                             }
                             _RoomDetails.value = d
+                            db.child(key).setValue(d)
+
                         }
                     }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {}
-
         })
-
-        key.let {
-            if (it != null) {
-                db.child(it).setValue(roomDetails)
-            }
-        }
 
 
     }
