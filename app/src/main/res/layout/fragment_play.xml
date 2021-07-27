@@ -138,7 +138,6 @@
 
                 <ImageView
                     android:id="@+id/btn1"
-                    android:clickable="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:tag="0" />

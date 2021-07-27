@@ -22,7 +22,7 @@ object Utils {
                 status = "Win"
             }
         }
-        if (!GameList.contains("A")){
+        if (!GameList.contains("A") && status == "NA"){
             status = "Draw"
         }
         return status

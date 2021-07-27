@@ -38,7 +38,7 @@
         android:fontFamily="@font/otomanopeeone_regular"
         android:text="Enter your name : "
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -88,7 +88,7 @@
         android:fontFamily="@font/otomanopeeone_regular"
         android:text="Enter the Game ID : "
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NameCard" />
@@ -103,10 +103,12 @@
         app:cardMaxElevation="12dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/room_id"
@@ -140,7 +142,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RoomID"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.51" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

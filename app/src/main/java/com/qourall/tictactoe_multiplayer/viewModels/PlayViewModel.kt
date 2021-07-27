@@ -33,6 +33,14 @@ class PlayViewModel : ViewModel() {
     val checkstatusOfGame : LiveData<String?>
         get() = _checkstatusOfGame
 
+    private var _scoreP1 = MutableLiveData<Int?>()
+    val scoreP1 : LiveData<Int?>
+        get() = _scoreP1
+
+    private var _scoreP2 = MutableLiveData<Int?>()
+    val scoreP2 : LiveData<Int?>
+        get() = _scoreP2
+
     fun getRoomDetails(DBkey: String) {
         db.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -60,10 +68,14 @@ class PlayViewModel : ViewModel() {
             _moves.value = room!!.GameList
             if (Player1or2 == 1){
                 _player_move.value = room.Player1Move
+                _checkstatusOfGame.value = roomDetailsClass.Player1Status
             }
             if (Player1or2 == 2){
                 _player_move.value = room.Player2Move
+                _checkstatusOfGame.value = roomDetailsClass.Player2Status
             }
+            _scoreP1.value = roomDetailsClass.Player1Score
+            _scoreP2.value = roomDetailsClass.Player2Score
         }
 
         override fun onCancelled(error: DatabaseError) {}
@@ -92,10 +104,12 @@ class PlayViewModel : ViewModel() {
     private fun add(player: Int, btn: Int){
         if(player == 1){
             roomDetailsClass.Player1Array.add(btn)
-            roomDetailsClass.GameList[btn-1] = "X"
+            roomDetailsClass.GameList[btn-1] = roomDetailsClass.Player1Char!!
             roomDetailsClass.Player1Move = false
             roomDetailsClass.Player2Move = true
+
             roomDetailsClass.Player1Status = Utils.checkWin(roomDetailsClass.Player1Array, roomDetailsClass.GameList)
+
             if (roomDetailsClass.Player1Status == "Draw"){
                 roomDetailsClass.Player2Status = "Draw"
             }
@@ -103,22 +117,43 @@ class PlayViewModel : ViewModel() {
                 roomDetailsClass.Player1Score = roomDetailsClass.Player1Score?.plus(1)
                 roomDetailsClass.Player2Status = "Lose"
             }
-            _checkstatusOfGame.value = roomDetailsClass.Player1Status
         }else{
             roomDetailsClass.Player2Array.add(btn)
-            roomDetailsClass.GameList[btn-1] = "O"
+            roomDetailsClass.GameList[btn-1] = roomDetailsClass.Player2Char!!
             roomDetailsClass.Player2Move = false
             roomDetailsClass.Player1Move = true
-            roomDetailsClass.Player2Status = Utils.checkWin(roomDetailsClass.Player1Array, roomDetailsClass.GameList)
+
+            roomDetailsClass.Player2Status = Utils.checkWin(roomDetailsClass.Player2Array, roomDetailsClass.GameList)
+
             if (roomDetailsClass.Player2Status == "Draw"){
                 roomDetailsClass.Player1Status = "Draw"
             }
             if (roomDetailsClass.Player2Status == "Win"){
-                roomDetailsClass.Player1Score = roomDetailsClass.Player2Score?.plus(1)
+                roomDetailsClass.Player2Score = roomDetailsClass.Player2Score?.plus(1)
                 roomDetailsClass.Player1Status = "Lose"
             }
-            _checkstatusOfGame.value = roomDetailsClass.Player1Status
         }
+        db.child(key).setValue(roomDetailsClass)
+    }
+
+    fun playAgain(){
+        roomDetailsClass.GameList = mutableListOf("A","A","A","A","A","A","A","A","A")
+        roomDetailsClass.Player1Array = mutableListOf(10)
+        roomDetailsClass.Player2Array = mutableListOf(10)
+//        if (roomDetailsClass.Player1Char == "X") {
+//            roomDetailsClass.Player1Char = "O"
+//            roomDetailsClass.Player1Move = false
+//            roomDetailsClass.Player2Move = true
+//            roomDetailsClass.Player2Char = "X"
+//        }else {
+//            roomDetailsClass.Player1Char = "X"
+//            roomDetailsClass.Player1Move = true
+//            roomDetailsClass.Player2Move = false
+//            roomDetailsClass.Player2Char = "O"
+//        }
+        roomDetailsClass.Player1Status = "NA"
+        roomDetailsClass.Player2Status = "NA"
+
         db.child(key).setValue(roomDetailsClass)
     }
 }

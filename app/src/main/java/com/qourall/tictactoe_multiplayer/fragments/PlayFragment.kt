@@ -2,6 +2,8 @@ package com.qourall.tictactoe_multiplayer.fragments
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity.CENTER
+import android.view.Gravity.END
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.geniusforapp.fancydialog.builders.FancyDialogBuilder
 import com.qourall.tictactoe_multiplayer.R
 import com.qourall.tictactoe_multiplayer.data.RoomDetails
 import com.qourall.tictactoe_multiplayer.viewModels.PlayViewModel
@@ -23,7 +26,10 @@ class PlayFragment : Fragment() {
     lateinit var playViewModel: PlayViewModel
     lateinit var roomDetails: RoomDetails
     lateinit var playerPiece: String
+    private var playedMoves: MutableList<String> = mutableListOf("A","A","A","A","A","A","A","A","A")
     var playerMove: Boolean = false
+
+    lateinit var btnList : Array<ImageView>
 
     val args : PlayFragmentArgs by navArgs()
 
@@ -43,6 +49,8 @@ class PlayFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        btnList = arrayOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9)
+
         playViewModel.getRoomDetails(args.key)
         playViewModel.getRealtimeDetails(args.key, args.player)
         playViewModel.RoomD.observe(viewLifecycleOwner, {
@@ -55,7 +63,7 @@ class PlayFragment : Fragment() {
                         playerMove = true
                     }
                 }
-                if (args.player == 2){
+                else if (args.player == 2){
                     playerPiece = roomDetails.Player2Char!!
                     if (roomDetails.Player2Move == true){
                         playerMove = true
@@ -79,42 +87,114 @@ class PlayFragment : Fragment() {
         })
 
         playViewModel.moves.observe(viewLifecycleOwner, {
+            playedMoves = it
             refreshPlayedMoves(it)
         })
 
+        playViewModel.scoreP1.observe(viewLifecycleOwner, {
+            p1_winning.text = it.toString()
+        })
+        playViewModel.scoreP2.observe(viewLifecycleOwner, {
+            p2_winning.text = it.toString()
+        })
+
+        playViewModel.checkstatusOfGame.observe(viewLifecycleOwner, {
+            when (it) {
+                "Draw" -> {
+                    val dialog = FancyDialogBuilder(requireContext(), R.style.CustomDialog)
+                        .withImageIcon(R.drawable.tic_tac_toe)
+                        .withTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withSubTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withActionPositiveTypeFace(R.font.otomanopeeone_regular)
+                        .withActionNegativeTypeFace(R.font.otomanopeeone_regular)
+                        .withTextGravity(CENTER)
+                        .withPanelGravity(CENTER)
+                        .withTitle("Draw")
+                        .withSubTitle("The Game is Draw")
+                        .withPositive("") { _, dialog ->
+                            dialog.dismiss()
+                            playViewModel.playAgain()
+                        }
+                        .withNegative("NO") {view, dialog ->
+                            dialog.dismiss()
+                            Navigation.findNavController(requireView()).navigate(R.id.action_playFragment_to_createJoinFragment)
+                        }
+                    dialog.show()
+                }
+                "Win" -> {
+                    val dialog = FancyDialogBuilder(requireContext(), R.style.CustomDialog)
+                        .withImageIcon(R.drawable.trophy_win)
+                        .withTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withSubTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withActionPositiveTypeFace(R.font.otomanopeeone_regular)
+                        .withActionNegativeTypeFace(R.font.otomanopeeone_regular)
+                        .withTextGravity(CENTER)
+                        .withPanelGravity(CENTER)
+                        .withTitle("Win")
+                        .withSubTitle("Congratulations!! You won the Game.")
+                        .withPositive("PLAY AGAIN") { _, dialog ->
+                            dialog.dismiss()
+                            playViewModel.playAgain()
+                        }
+                        .withNegative("LEAVE GAME") {view, dialog ->
+                            dialog.dismiss()
+                            Navigation.findNavController(requireView()).navigate(R.id.action_playFragment_to_createJoinFragment)
+                        }
+                    dialog.show()
+                }
+                "Lose" -> {
+                    val dialog = FancyDialogBuilder(requireContext(), R.style.CustomDialog)
+                        .withImageIcon(R.drawable.defeat)
+                        .withTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withSubTitleTypeFace(R.font.otomanopeeone_regular)
+                        .withActionPositiveTypeFace(R.font.otomanopeeone_regular)
+                        .withActionNegativeTypeFace(R.font.otomanopeeone_regular)
+                        .withTextGravity(CENTER)
+                        .withPanelGravity(CENTER)
+                        .withTitle("Defeat")
+                        .withSubTitle("Oh No!! You just lost the Game.")
+                        .withPositive("PLAY AGAIN") { _, dialog ->
+                            dialog.dismiss()
+                            playViewModel.playAgain()
+                        }
+                        .withNegative("LEAVE GAME") {view, dialog ->
+                            dialog.dismiss()
+                            Navigation.findNavController(requireView()).navigate(R.id.action_playFragment_to_createJoinFragment)
+
+                        }
+                    dialog.show()
+                }
+            }
+        })
+
         btnQuit.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_playFragment_to_createJoinFragment)
+            val dialog = FancyDialogBuilder(requireContext(), R.style.CustomDialog)
+                .withImageIcon(R.drawable.tic_tac_toe)
+                .withTitleTypeFace(R.font.otomanopeeone_regular)
+                .withSubTitleTypeFace(R.font.otomanopeeone_regular)
+                .withActionPositiveTypeFace(R.font.otomanopeeone_regular)
+                .withActionNegativeTypeFace(R.font.otomanopeeone_regular)
+                .withTextGravity(CENTER)
+                .withPanelGravity(CENTER)
+                .withTitle("Exit Game")
+                .withSubTitle("Are you sure you want to leave this Game.")
+                .withPositive("YES") { _, dialog ->
+                    Navigation.findNavController(it).navigate(R.id.action_playFragment_to_createJoinFragment)
+                    dialog.dismiss()
+                }
+                .withNegative("NO") {view, dialog -> dialog.dismiss() }
+            dialog.show()
         }
         btnOnClick()
     }
 
     private fun btnOnClick(){
-        btn1.setOnClickListener {
-            innerbtnOnClick(btn1, 1)
-        }
-        btn2.setOnClickListener {
-            innerbtnOnClick(btn2, 2)
-        }
-        btn3.setOnClickListener {
-            innerbtnOnClick(btn3, 3)
-        }
-        btn4.setOnClickListener {
-            innerbtnOnClick(btn4, 4)
-        }
-        btn5.setOnClickListener {
-            innerbtnOnClick(btn5, 5)
-        }
-        btn6.setOnClickListener {
-            innerbtnOnClick(btn6, 6)
-        }
-        btn7.setOnClickListener {
-            innerbtnOnClick(btn7, 7)
-        }
-        btn8.setOnClickListener {
-            innerbtnOnClick(btn8, 8)
-        }
-        btn9.setOnClickListener {
-            innerbtnOnClick(btn9, 9)
+        for (i in 0..8){
+            if(playedMoves[i] == "A"){
+                btnList[i].setOnClickListener {
+                    innerbtnOnClick(btnList[i], i+1)
+                }
+            }
         }
     }
 
@@ -122,7 +202,7 @@ class PlayFragment : Fragment() {
         if (playerPiece == "X"){
             btn.setImageResource(R.drawable.ic_cross_yellow)
         }
-        else{
+        if (playerPiece == "O"){
             btn.setImageResource(R.drawable.ic_circle_secondary)
         }
         playViewModel.btnClick(btnPos ,args.player)
@@ -130,73 +210,80 @@ class PlayFragment : Fragment() {
 
     private fun refreshPlayedMoves(moves: MutableList<String>){
         for (i in moves.indices){
-            if (i == 0 && moves[i] == "X"){
-                btn1.setImageResource(R.drawable.ic_cross_yellow)
+
+            for(j in 0..8){
+                if (i == j && moves[i] == "X"){
+                    btnList[j].setImageResource(R.drawable.ic_cross_yellow)
+                }
+                else if (i == j && moves[i] == "O"){
+                    btnList[j].setImageResource(R.drawable.ic_circle_secondary)
+                }
+                else if (i == j && moves[i] == "A"){
+                    btnList[j].setImageDrawable(null)
+                }
             }
-            else if (i == 0 && moves[i] == "O"){
-                btn1.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 1 && moves[i] =="X"){
-                btn2.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 1 && moves[i] == "O"){
-                btn2.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 2 && moves[i] =="X"){
-                btn3.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 2 && moves[i] == "O"){
-                btn3.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 3 && moves[i] =="X"){
-                btn4.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 3 && moves[i] == "O"){
-                btn4.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 4 && moves[i] =="X"){
-                btn5.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 4 && moves[i] == "O"){
-                btn5.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 5 && moves[i] =="X"){
-                btn6.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 5 && moves[i] == "O"){
-                btn6.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 6 && moves[i] =="X"){
-                btn7.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 6 && moves[i] == "O"){
-                btn7.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 7 && moves[i] =="X"){
-                btn8.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 7 && moves[i] == "O"){
-                btn8.setImageResource(R.drawable.ic_circle_secondary)
-            }
-            if (i == 8 && moves[i] =="X"){
-                btn9.setImageResource(R.drawable.ic_cross_yellow)
-            }
-            else if (i == 8 && moves[i] == "O"){
-                btn9.setImageResource(R.drawable.ic_circle_secondary)
-            }
+//
+//            if (i == 0 && moves[i] == "X"){
+//                btn1.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 0 && moves[i] == "O"){
+//                btn1.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 1 && moves[i] =="X"){
+//                btn2.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 1 && moves[i] == "O"){
+//                btn2.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 2 && moves[i] =="X"){
+//                btn3.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 2 && moves[i] == "O"){
+//                btn3.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 3 && moves[i] =="X"){
+//                btn4.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 3 && moves[i] == "O"){
+//                btn4.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 4 && moves[i] =="X"){
+//                btn5.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 4 && moves[i] == "O"){
+//                btn5.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 5 && moves[i] =="X"){
+//                btn6.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 5 && moves[i] == "O"){
+//                btn6.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 6 && moves[i] =="X"){
+//                btn7.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 6 && moves[i] == "O"){
+//                btn7.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 7 && moves[i] =="X"){
+//                btn8.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 7 && moves[i] == "O"){
+//                btn8.setImageResource(R.drawable.ic_circle_secondary)
+//            }
+//            if (i == 8 && moves[i] =="X"){
+//                btn9.setImageResource(R.drawable.ic_cross_yellow)
+//            }
+//            else if (i == 8 && moves[i] == "O"){
+//                btn9.setImageResource(R.drawable.ic_circle_secondary)
+//            }
         }
     }
 
     private fun setImageViewUnClickable(){
-        btn1.setOnClickListener(null)
-        btn2.setOnClickListener(null)
-        btn3.setOnClickListener(null)
-        btn4.setOnClickListener(null)
-        btn5.setOnClickListener(null)
-        btn6.setOnClickListener(null)
-        btn7.setOnClickListener(null)
-        btn8.setOnClickListener(null)
-        btn9.setOnClickListener(null)
+        for (i in 0..8){
+            btnList[i].setOnClickListener(null)
+        }
     }
 
 }

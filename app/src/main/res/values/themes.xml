@@ -13,4 +13,14 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="CustomDialog" parent="FancyDialogTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="positiveButtonStyle">@style/positiveButtonStyle</item>
+        <item name="negativeButtonStyle">@style/negativeButtonStyle</item>
+        <item name="textTitleColor">@color/black</item>
+        <item name="textSubTitleColor">#292828</item>
+        <item name="dialogBackground">#ED7C32</item>
+    </style>
 </resources>
