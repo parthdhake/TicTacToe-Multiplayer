@@ -9,7 +9,17 @@
         android:id="@+id/playFragment"
         android:name="com.qourall.tictactoe_multiplayer.fragments.PlayFragment"
         android:label="fragment_play"
-        tools:layout="@layout/fragment_play" />
+        tools:layout="@layout/fragment_play" >
+        <action
+            android:id="@+id/action_playFragment_to_createJoinFragment"
+            app:destination="@id/createJoinFragment" />
+        <argument
+            android:name="key"
+            app:argType="string" />
+        <argument
+            android:name="player"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/createJoinFragment"
         android:name="com.qourall.tictactoe_multiplayer.fragments.CreateJoinFragment"

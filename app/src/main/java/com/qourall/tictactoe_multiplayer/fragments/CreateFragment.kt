@@ -23,8 +23,8 @@ import kotlinx.android.synthetic.main.fragment_join.*
 
 class CreateFragment : Fragment() {
 
-    lateinit var Room_ID : String
     lateinit var createViewModel: CreateViewModel
+    lateinit var key: String
     var name: String? = null
 
     override fun onCreateView(
@@ -65,6 +65,14 @@ class CreateFragment : Fragment() {
             }
         })
 
+        createViewModel.keyDB.observe(viewLifecycleOwner, Observer {
+            if (it != null){
+                key = it
+            }
+        })
+
+
+
         roomButton.setOnClickListener {
             name  =  textFieldName.editText?.text.toString().trim()
             if (name.isNullOrEmpty()) {
@@ -79,7 +87,8 @@ class CreateFragment : Fragment() {
         }
 
         startButton.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_createFragment_to_playFragment)
+            val action = CreateFragmentDirections.actionCreateFragmentToPlayFragment(key, 1)
+            Navigation.findNavController(it).navigate(action)
         }
 
     }

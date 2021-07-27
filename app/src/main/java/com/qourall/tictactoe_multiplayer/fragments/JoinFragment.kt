@@ -22,7 +22,7 @@ class JoinFragment : Fragment() {
     lateinit var joinViewModel: JoinViewModel
     var name : String? = null
     var etrRoomID : String? = null
-    private var flag : Boolean = false
+    private var key : String? = null
 
 
     override fun onCreateView(
@@ -53,14 +53,18 @@ class JoinFragment : Fragment() {
             roomDetails = it
 //            Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
             if (name == it.Player2Name){
-                Navigation.findNavController(requireView()).navigate(R.id.action_joinFragment_to_playFragment)
+                val action = JoinFragmentDirections.actionJoinFragmentToPlayFragment(key!!, 2)
+                Navigation.findNavController(requireView()).navigate(action)
             }
             if (name != it.Player2Name){
                 Toast.makeText(context, "RoomID Invalid", Toast.LENGTH_LONG).show()
             }
         })
 
+        joinViewModel.keyDB.observe(viewLifecycleOwner, Observer {
+            if (it != null){
+                key = it
+            }
+        })
     }
-
-
 }

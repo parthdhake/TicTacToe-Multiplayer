@@ -11,6 +11,9 @@ class CreateViewModel : ViewModel() {
 
     private val db = FirebaseDatabase.getInstance().getReference("RoomDetails")
     private var key: String? = null
+    private val _keyDB = MutableLiveData<String?>()
+    val keyDB : LiveData<String?>
+    get() = _keyDB
 
     private val _result = MutableLiveData<Exception?>()
     val result: LiveData<Exception?>
@@ -23,7 +26,22 @@ class CreateViewModel : ViewModel() {
     fun createRoom(name: String, roomDetails: RoomDetails){
         roomDetails.Player1Name = name
         key = db.push().key!!
+        _keyDB.value = key
         roomDetails.RoomID = key!!.takeLast(5)
+        val rand = (0..1).random()
+        if (rand == 1){
+            roomDetails.Player1Char = "X"
+            roomDetails.Player1Move = true
+            roomDetails.Player2Move = false
+            roomDetails.Player2Char = "O"
+        }
+        else{
+            roomDetails.Player1Char = "O"
+            roomDetails.Player1Move = false
+            roomDetails.Player2Move = true
+            roomDetails.Player2Char = "X"
+        }
+
 
         db.child(key!!).setValue(roomDetails)
             .addOnCompleteListener {
@@ -37,7 +55,7 @@ class CreateViewModel : ViewModel() {
     }
 
 
-    val valueEventListener = object : ValueEventListener{
+    private val valueEventListener = object : ValueEventListener{
         override fun onDataChange(snapshot: DataSnapshot) {
             val d = snapshot.getValue(RoomDetails::class.java)
             _join.value = d
