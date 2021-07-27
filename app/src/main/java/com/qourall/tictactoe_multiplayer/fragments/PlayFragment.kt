@@ -111,11 +111,11 @@ class PlayFragment : Fragment() {
                         .withPanelGravity(CENTER)
                         .withTitle("Draw")
                         .withSubTitle("The Game is Draw")
-                        .withPositive("") { _, dialog ->
+                        .withPositive("PLAY AGAIN") { _, dialog ->
                             dialog.dismiss()
                             playViewModel.playAgain()
                         }
-                        .withNegative("NO") {view, dialog ->
+                        .withNegative("LEAVE GAME") { _, dialog ->
                             dialog.dismiss()
                             Navigation.findNavController(requireView()).navigate(R.id.action_playFragment_to_createJoinFragment)
                         }
@@ -136,7 +136,7 @@ class PlayFragment : Fragment() {
                             dialog.dismiss()
                             playViewModel.playAgain()
                         }
-                        .withNegative("LEAVE GAME") {view, dialog ->
+                        .withNegative("LEAVE GAME") { _, dialog ->
                             dialog.dismiss()
                             Navigation.findNavController(requireView()).navigate(R.id.action_playFragment_to_createJoinFragment)
                         }

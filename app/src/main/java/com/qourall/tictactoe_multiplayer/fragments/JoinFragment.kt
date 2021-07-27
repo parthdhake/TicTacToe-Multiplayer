@@ -1,11 +1,15 @@
 package com.qourall.tictactoe_multiplayer.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -14,7 +18,6 @@ import com.qourall.tictactoe_multiplayer.data.RoomDetails
 import com.qourall.tictactoe_multiplayer.viewModels.JoinViewModel
 import kotlinx.android.synthetic.main.fragment_create.*
 import kotlinx.android.synthetic.main.fragment_join.*
-
 
 
 class JoinFragment : Fragment() {
@@ -47,6 +50,13 @@ class JoinFragment : Fragment() {
                 return@setOnClickListener
             }
             joinViewModel.getRoomDetails(roomDetails, name!!, etrRoomID!!)
+        }
+
+        paste.setOnClickListener {
+            val myClipboard: ClipboardManager? = context?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+            val abc: ClipData? = myClipboard?.primaryClip
+            val item = abc?.getItemAt(0)
+            room_id.editText?.setText(item?.text.toString())
         }
 
         joinViewModel.RoomD.observe(viewLifecycleOwner, Observer {

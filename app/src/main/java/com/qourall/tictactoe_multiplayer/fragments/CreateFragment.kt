@@ -43,6 +43,8 @@ class CreateFragment : Fragment() {
             val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val clipData = ClipData.newPlainText("text", txtroomid.text.toString().trim())
             clipboardManager.setPrimaryClip(clipData)
+            Toast.makeText(context, "RoomID Copied Successfully", Toast.LENGTH_LONG).show()
+
         }
 
         createViewModel.result.observe(viewLifecycleOwner, Observer {

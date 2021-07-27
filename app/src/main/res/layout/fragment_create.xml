@@ -7,14 +7,27 @@
     android:background="#FFED4D"
     tools:context=".fragments.CreateFragment">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/otomanopeeone_regular"
+        android:text="Tic Tac Toe"
+        android:textColor="@color/purple_700"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter your name : "
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/otomanopeeone_regular"
+        android:text="Enter your name : "
         android:textColor="@color/black"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="52dp"
+        app:cornerRadius="40dp"
         android:text="Get Game id"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textView3"

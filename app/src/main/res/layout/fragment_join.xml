@@ -7,13 +7,7 @@
     android:background="#FFED4D"
     tools:context=".fragments.JoinFragment">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/tic_tac_toe"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textView4" />
+
 
     <TextView
         android:id="@+id/textView4"
@@ -116,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:hint="ROOM ID"
+            android:hint="GAME ID"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -124,10 +118,22 @@
 
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <ImageView
+                android:id="@+id/paste"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:layout_height="wrap_content"
+                android:src="@drawable/paste_24"
+                android:focusable="true" />
+
         </com.google.android.material.textfield.TextInputLayout>
+
 
     </androidx.cardview.widget.CardView>
 
@@ -135,14 +141,13 @@
         android:id="@+id/startGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="Start Game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RoomID"
-        app:layout_constraintVertical_bias="0.51" />
+        app:layout_constraintVertical_bias="0.45" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
