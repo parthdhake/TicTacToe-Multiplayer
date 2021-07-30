@@ -12,13 +12,13 @@ The classic Tic-Tac-Toe game for Android using __Kotlin__. It uses Google's __Fi
 
 ## Screenshots
 
-| | | | | |
-|:----:|:----:|:----:|:----:|:----:|
-| <img alt="SS_1" src="ScreenShots/4.png"> | <img alt="SS_2" src="ScreenShots/3.png"> | <img alt="SS_3" src="ScreenShots/2.png"> | <img alt="SS_4" src="ScreenShots/1.png"> | <img alt="SS_5" src="ScreenShots/5.png"> |<img alt="SS_6" src="ScreenShots/6.png"> |
+| | | | |
+|:----:|:----:|:----:|:----:|
+| <img alt="SS_1" src="ScreenShots/4.png"> | <img alt="SS_2" src="ScreenShots/3.png"> | <img alt="SS_3" src="ScreenShots/2.png"> | <img alt="SS_4" src="ScreenShots/1.png"> | <img alt="SS_5" src="ScreenShots/5.png"> |
 
-| | | |
-|:----:|:----:|:----:|
-| <img alt="SS_1" src="ScreenShots/6.png"> | <img alt="SS_2" src="ScreenShots/3.png"> | <img alt="SS_1" src="ScreenShots/7.png"> | 
+| | | | |
+|:----:|:----:|:----:|:----:|
+|<img alt="SS_6" src="ScreenShots/6.png"> | <img alt="SS_1" src="ScreenShots/6.png"> | <img alt="SS_2" src="ScreenShots/3.png"> | <img alt="SS_1" src="ScreenShots/7.png"> | 
 
 <!-- 
 
